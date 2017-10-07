@@ -1,5 +1,6 @@
 from copy import deepcopy
 
+
 class Agent:
     """The parent class of all agents
 
@@ -15,6 +16,7 @@ class Agent:
     individual they can ask the other agent for said data and then update they information. This convention improves
     modularity, scalability, and cohesion for each agent.
     """
+
     def __init__(self, agent_name, environment=None):
         """Assigns the agent it's name and environment based on passed parameters
 
@@ -23,18 +25,15 @@ class Agent:
         in code.
 
         Key variables:
-        agent_info: defines data that is unique to the agent, allows for dynamic learning
-        collected_info: this is data that is collected from other agents. Used mainly by managers to get info from
-        employees.
         environment: see the environment class. An environment defines what objects an agent has access to.
         """
-        self.agent_info = {}
-        self.collected_info = {}
         self.agent_name = agent_name
-        self.environment = environment
+        if Agent.environment is None:
+            Agent.environment = environment
         Agent.__agent_list[agent_name] = self
 
     __agent_list = {}
+    environment = None
 
     def ask(self, agent_name, variable_name):
         """creates a deep copy of a member variable from one agent to another"""
@@ -49,7 +48,3 @@ class Agent:
     def report(self, manager, data_name, data):
         """sends updated information to a manger or coworker agent"""
         manager.collected_info[self.agent_name + "." + data_name] = data
-
-
-
-

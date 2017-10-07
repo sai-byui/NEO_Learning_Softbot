@@ -10,24 +10,18 @@ class Memory(Agent):
         """default constructor"""
         super(Memory, self).__init__("memory")
         self.colors = {}
+        self.create_color_categories()
+        self.weights = {}
+        self.create_weight_categories()
 
+    def create_color_categories(self):
+        for color_name in Color:
+            self.colors[color_name] = color_name.value
 
+    def create_weight_categories(self):
+        for weight_category in Weight:
+            self.weights[weight_category] = weight_category.value
 
-
-
-
-SMALL_MIN_LENGTH = 0.1
-SMALL_MAX_LENGTH = 10
-MED_MIN_LENGTH = 10
-MED_MAX_LENGTH = 36
-LARGE_MIN_LENGTH = 36
-LARGE_MAX_LENGTH = 240
-
-
-class Size(Enum):
-    SMALL = (SMALL_MIN_LENGTH, SMALL_MAX_LENGTH)
-    MEDIUM = (MED_MIN_LENGTH, MED_MAX_LENGTH)
-    LARGE = (LARGE_MIN_LENGTH, LARGE_MAX_LENGTH)
 
 
 class Color(Enum):

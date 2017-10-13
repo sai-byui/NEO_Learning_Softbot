@@ -2,7 +2,7 @@ from neo_body.agent import Agent
 
 
 class Legs(Agent):
-    """Allows NEO to move in its environment"""
+    """Allows NEO to move in the environment"""
 
     def __init__(self):
         """default constructor"""

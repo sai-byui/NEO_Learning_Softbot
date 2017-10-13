@@ -22,3 +22,7 @@ class Mouth(Agent):
         else:
             print("I can see " + str(visible_obj) + " object")
 
+    def state_current_position(self):
+        position = self.ask("brain", "position")
+        print("My current position is " + str(position))
+

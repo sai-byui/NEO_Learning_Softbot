@@ -3,8 +3,8 @@ from neo_body.eyes import Eyes
 from neo_body.hands import Hands
 from neo_body.memory import Memory
 from neo_body.mouth import Mouth
+from neo_body.legs import Legs
 from enum import Enum
-
 
 
 class brain(Agent):
@@ -21,11 +21,13 @@ class brain(Agent):
         self.hands = Hands()
         self.memory = Memory()
         self.mouth = Mouth()
+        self.legs = Legs()
+
 
     def scan_room(self):
         self.eyes.scan_area()
         self.mouth.report_visible_objects()
-        self.finished = True
+
 
     def report_understanding(self):
         self.mouth.list_categories()
@@ -34,12 +36,18 @@ class brain(Agent):
         if self.CURRENT_STATE == BEHAVIOR_STATE.SCANNING:
             self.scan_room()
             self.report_understanding()
+            self.CURRENT_STATE = BEHAVIOR_STATE.APPROACHING
         elif self.CURRENT_STATE == BEHAVIOR_STATE.APPROACHING:
-            pass
+            while self.position != self.environment.object_list[0].position:
+                self.legs.walk()
+                self.position = self.ask("legs", "position")
+                self.mouth.state_current_position()
+            self.CURRENT_STATE = BEHAVIOR_STATE.FINISHED
         elif self.CURRENT_STATE == BEHAVIOR_STATE.INSPECTING:
             pass
         else:
             self.CURRENT_STATE = BEHAVIOR_STATE.FINISHED
+            self.finished = True
 
 
 class BEHAVIOR_STATE(Enum):

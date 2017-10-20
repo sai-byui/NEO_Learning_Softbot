@@ -42,9 +42,14 @@ class brain(Agent):
                 self.legs.walk()
                 self.position = self.ask("legs", "position")
                 self.mouth.state_current_position()
-            self.CURRENT_STATE = BEHAVIOR_STATE.FINISHED
+
+            self.CURRENT_STATE = BEHAVIOR_STATE.INSPECTING
         elif self.CURRENT_STATE == BEHAVIOR_STATE.INSPECTING:
-            pass
+            # hands.pick_up_object()
+            self.eyes.look_at_object()
+            self.memory.memorize()
+            self.finished = True
+
         else:
             self.CURRENT_STATE = BEHAVIOR_STATE.FINISHED
             self.finished = True

@@ -13,7 +13,7 @@ class Text_Environment(Environment):
         self.object_list.append(object)
 
 text_matrix = Text_Environment()
-test_object = Object("apple", (255, 0, 0), 1, 300)
+test_object = Object("apple", "red", 1, 300)
 text_matrix.add_object(test_object)
 print("adding " + text_matrix.object_list[0].name + " into the matrix")
 print("adding neo into the matrix")

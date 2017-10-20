@@ -14,7 +14,12 @@ class Eyes(Agent):
 
     def look_at_object(self):
         self.determine_color()
-        self.determine_size()
+
+
+
+    def determine_color(self):
+       self.current_object_color = self.environment.object_list[0].color
+
 
     def scan_area(self):
         self.FACING_DIRECTION = self.ask("brain", "facing_direction")

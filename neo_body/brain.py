@@ -17,6 +17,8 @@ class brain(Agent):
         self.facing_direction = "RIGHT"
         self.finished = False
         self.position = 100
+        self.current_object_name = None
+        self.uninspected_objects = []
         self.eyes = Eyes()
         self.hands = Hands()
         self.memory = Memory()
@@ -24,32 +26,35 @@ class brain(Agent):
         self.legs = Legs()
 
 
+    def determine_object_name(self):
+        self.current_object_name = self.uninspected_objects[0].name
+        self.uninspected_objects.pop(0)
+
     def scan_room(self):
         self.eyes.scan_area()
         self.mouth.report_visible_objects()
 
-
-    def report_understanding(self):
-        self.mouth.list_categories()
-
     def run_learning_program(self):
         if self.CURRENT_STATE == BEHAVIOR_STATE.SCANNING:
             self.scan_room()
-            self.report_understanding()
+            self.uninspected_objects = self.ask("eyes", "visible_object_list")
             self.CURRENT_STATE = BEHAVIOR_STATE.APPROACHING
         elif self.CURRENT_STATE == BEHAVIOR_STATE.APPROACHING:
-            while self.position != self.environment.object_list[0].position:
+            while self.position != self.uninspected_objects[0].position:
                 self.legs.walk()
                 self.position = self.ask("legs", "position")
                 self.mouth.state_current_position()
-
             self.CURRENT_STATE = BEHAVIOR_STATE.INSPECTING
         elif self.CURRENT_STATE == BEHAVIOR_STATE.INSPECTING:
             # hands.pick_up_object()
             self.eyes.look_at_object()
+            self.determine_object_name()
             self.memory.memorize()
-            self.finished = True
 
+            if self.uninspected_objects:
+                self.CURRENT_STATE = BEHAVIOR_STATE.APPROACHING
+            else:
+                self.finished = True
         else:
             self.CURRENT_STATE = BEHAVIOR_STATE.FINISHED
             self.finished = True

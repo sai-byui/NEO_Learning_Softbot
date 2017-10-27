@@ -16,10 +16,14 @@ class Text_Environment(Environment):
 
     def query_neo(self, neo):
         query = ""
-        answer = input("Would you like to query NEO?").lower()
-        if answer == 'y':
-            query = input("Enter a color (red, orange, yellow)").lower()
-            neo.find_objects(query)
+        finished = False
+        while not finished:
+            answer = input("Would you like to query NEO?(y/n)").lower()
+            if answer == 'y':
+                query = input("Enter a color (red, orange, yellow)").lower()
+                neo.find_objects(query)
+            else:
+                finished = True
 
 
 

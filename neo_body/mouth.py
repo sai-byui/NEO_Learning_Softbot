@@ -10,7 +10,8 @@ class Mouth(Agent):
 
     def list_similar_objects(self):
         object_list = self.ask("brain", "list_of_objects")
-        print(object_list)
+        for object in object_list:
+            print(object[0])
 
     def report_visible_objects(self):
         visible_obj = self.ask("eyes", "num_vis_obj")

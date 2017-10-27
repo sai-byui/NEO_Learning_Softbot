@@ -33,7 +33,7 @@ class brain(Agent):
         self.uninspected_objects.pop(0)
 
     def find_objects(self, query):
-        self.sql_statement = "SELECT OBJECT_NAME FROM OBJECTS WHERE OBJECT_COLOR = " + query + ";"
+        self.sql_statement = "SELECT OBJECT_NAME FROM OBJECTS WHERE OBJECT_COLOR = '" + query + "';"
         self.memory.recall_objects()
         self.list_of_objects = self.ask("memory", "short_term_memory")
         self.mouth.list_similar_objects()
@@ -54,7 +54,7 @@ class brain(Agent):
                 self.mouth.state_current_position()
             self.CURRENT_STATE = BEHAVIOR_STATE.INSPECTING
         elif self.CURRENT_STATE == BEHAVIOR_STATE.INSPECTING:
-            # hands.pick_up_object()
+            self.hands.pick_up_object()
             self.eyes.look_at_object()
             self.determine_object_name()
             self.memory.memorize()

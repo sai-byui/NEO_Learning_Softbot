@@ -14,6 +14,7 @@ class Memory(Agent):
         self.current_object_color = None
         self.current_object_name = None
         self.short_term_memory = None
+        self.current_object_weight = None
         self.colors = {}
         self.weights = {}
         self.create_object_memory()
@@ -21,6 +22,7 @@ class Memory(Agent):
     def memorize(self):
         self.current_object_color = self.ask("eyes", "current_object_color")
         self.current_object_name = self.ask("brain", "current_object_name")
+        self.current_object_weight = self.ask("hands", "current_object_weight")
         self.store_object_info()
 
     def store_object_info(self):
@@ -28,8 +30,9 @@ class Memory(Agent):
 
         cursor = conn.cursor()
 
-        cursor.execute("INSERT INTO OBJECTS VALUES (:name, :color)",
-                       {'name': self.current_object_name, 'color': self.current_object_color})
+        cursor.execute("INSERT INTO OBJECTS VALUES (:name, :color, :weight)",
+                       {'name': self.current_object_name, 'color': self.current_object_color,
+                        'weight': self.current_object_weight})
 
         cursor.execute("""SELECT * FROM OBJECTS WHERE OBJECT_NAME = :name""", {'name': self.current_object_name})
         print(cursor.fetchone())
@@ -45,7 +48,7 @@ class Memory(Agent):
         cursor = conn.cursor()
 
         cursor.execute("""DROP TABLE IF EXISTS OBJECTS""")
-        cursor.execute("""CREATE TABLE IF NOT EXISTS OBJECTS ( OBJECT_NAME, OBJECT_COLOR )""")
+        cursor.execute("""CREATE TABLE IF NOT EXISTS OBJECTS ( OBJECT_NAME, OBJECT_COLOR, OBJECT_WEIGHT )""")
 
         conn.commit()
         conn.close()

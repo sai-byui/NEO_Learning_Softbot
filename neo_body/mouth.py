@@ -8,6 +8,10 @@ class Mouth(Agent):
         """default constructor"""
         super(Mouth, self).__init__("mouth")
 
+    def list_similar_objects(self):
+        object_list = self.ask("brain", "list_of_objects")
+        print(object_list)
+
     def report_visible_objects(self):
         visible_obj = self.ask("eyes", "num_vis_obj")
         if visible_obj != 1:

@@ -2,6 +2,7 @@ from Matrix.environment import Environment
 from Object.Object import Object
 from neo_body.brain import brain
 
+
 class Text_Environment(Environment):
 
     def __init__(self):
@@ -11,6 +12,17 @@ class Text_Environment(Environment):
 
     def add_object(self, object):
         self.object_list.append(object)
+
+
+    def query_neo(self, neo):
+        query = ""
+        answer = input("Would you like to query NEO?").lower()
+        if answer == 'y':
+            query = input("Enter a color (red, orange, yellow)").lower()
+            neo.find_objects(query)
+
+
+
 
 text_matrix = Text_Environment()
 object_file = open("list_of_objects.txt", "r")
@@ -24,7 +36,9 @@ while line:
     text_matrix.add_object(test_object)
     print("adding " + object_name + " into the matrix")
     line = object_file.readline()
+object_file.close()
 print("adding neo into the matrix")
 neo = brain(text_matrix)
 while not neo.finished:
     neo.run_learning_program()
+text_matrix.query_neo(neo)

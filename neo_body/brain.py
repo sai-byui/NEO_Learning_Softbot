@@ -17,6 +17,8 @@ class brain(Agent):
         self.facing_direction = "RIGHT"
         self.finished = False
         self.position = 100
+        self.sql_statement = None
+        self.list_of_objects = None
         self.current_object_name = None
         self.uninspected_objects = []
         self.eyes = Eyes()
@@ -29,6 +31,12 @@ class brain(Agent):
     def determine_object_name(self):
         self.current_object_name = self.uninspected_objects[0].name
         self.uninspected_objects.pop(0)
+
+    def find_objects(self, query):
+        self.sql_statement = "SELECT OBJECT_NAME FROM OBJECTS WHERE OBJECT_COLOR = " + query + ";"
+        self.memory.recall_objects()
+        self.list_of_objects = self.ask("memory", "short_term_memory")
+        self.mouth.list_similar_objects()
 
     def scan_room(self):
         self.eyes.scan_area()

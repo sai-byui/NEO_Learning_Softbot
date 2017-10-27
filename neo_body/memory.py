@@ -13,6 +13,7 @@ class Memory(Agent):
         super(Memory, self).__init__("memory")
         self.current_object_color = None
         self.current_object_name = None
+        self.short_term_memory = None
         self.colors = {}
         self.weights = {}
         self.create_object_memory()
@@ -20,9 +21,9 @@ class Memory(Agent):
     def memorize(self):
         self.current_object_color = self.ask("eyes", "current_object_color")
         self.current_object_name = self.ask("brain", "current_object_name")
-        self.store_object_color()
+        self.store_object_info()
 
-    def store_object_color(self):
+    def store_object_info(self):
         conn = sqlite3.connect('neo_test.db')
 
         cursor = conn.cursor()
@@ -60,6 +61,17 @@ class Memory(Agent):
         # cursor.execute("""SELECT * FROM OBJECTS""")
         #
         # print(cursor.fetchone())
+
+    def recall_objects(self):
+        statement = self.ask("brain", "sql_statement")
+        conn = sqlite3.connect('neo_test.db')
+
+        cursor = conn.cursor()
+
+        cursor.execute(statement)
+
+        self.short_term_memory = cursor.fetchall()
+
 
 
 

@@ -18,6 +18,7 @@ class Memory(Agent):
         self.colors = {}
         self.weights = {}
         self.create_object_memory()
+        self.attribute_list = self.create_attribute_list()
 
     def memorize(self):
         self.current_object_color = self.ask("eyes", "current_object_color")
@@ -74,6 +75,15 @@ class Memory(Agent):
         cursor.execute(statement)
 
         self.short_term_memory = cursor.fetchall()
+
+    def create_attribute_list(self):
+        conn = sqlite3.connect('neo_test.db')
+
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT DISTINCT OBJECT_COLOR FROM OBJECTS;")
+
+        self.attribute_list = cursor.fetchall()
 
 
 

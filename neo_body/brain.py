@@ -4,6 +4,7 @@ from neo_body.hands import Hands
 from neo_body.memory import Memory
 from neo_body.mouth import Mouth
 from neo_body.legs import Legs
+from neo_body.wernicke_area import Wernicke_Area
 from enum import Enum
 
 
@@ -17,15 +18,18 @@ class brain(Agent):
         self.facing_direction = "RIGHT"
         self.finished = False
         self.position = 100
+        self.sentence = None
         self.sql_statement = None
         self.list_of_objects = None
         self.current_object_name = None
         self.uninspected_objects = []
         self.eyes = Eyes()
         self.hands = Hands()
+        self.legs = Legs()
         self.memory = Memory()
         self.mouth = Mouth()
-        self.legs = Legs()
+        self.wernicke_area = Wernicke_Area()
+
 
 
     def determine_object_name(self):
@@ -66,6 +70,15 @@ class brain(Agent):
         else:
             self.CURRENT_STATE = BEHAVIOR_STATE.FINISHED
             self.finished = True
+
+    def sentence_test(self, sentence):
+        self.sentence = sentence
+        self.wernicke_area.analyze_query()
+        if self.ask("wernicke_area", "correct_syntax"):
+            self.sql_statement = self.ask("wernicke_area", "sql_statement")
+            self.memory.recall_objects()
+            self.list_of_objects = self.ask("memory", "short_term_memory")
+        self.mouth.list_similar_objects()
 
 
 class BEHAVIOR_STATE(Enum):

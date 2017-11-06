@@ -25,6 +25,17 @@ class Text_Environment(Environment):
             else:
                 finished = True
 
+    def query_test(self, neo):
+        query = ""
+        finished = False
+        while not finished:
+            answer = input("Would you like to query NEO?(y/n)").lower()
+            if answer == 'y':
+                query = input("Enter a sentence in the following format (which objects are 'adjective')").lower()
+                neo.sentence_test(query)
+            else:
+                finished = True
+
 
 
 
@@ -45,4 +56,4 @@ print("adding neo into the matrix")
 neo = brain(text_matrix)
 while not neo.finished:
     neo.run_learning_program()
-text_matrix.query_neo(neo)
+text_matrix.query_test(neo)
